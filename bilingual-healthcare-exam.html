@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bilingual Healthcare ESL Proficiency Assessment</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --navy:#0A2540; --blue:#1A5FA8; --blue-mid:#2E7DD1; --blue-lt:#E8F3FD;
+  --teal:#0B7C8E; --teal-lt:#E0F5F7;
+  --green:#1B7A3E; --green-lt:#E8F5EE;
+  --red:#B91C1C; --red-lt:#FEF2F2;
+  --amber:#92400E; --amber-lt:#FFFBEB;
+  --purple:#5B21B6; --purple-lt:#F5F3FF;
+  --gray-50:#F9FAFB; --gray-100:#F3F4F6; --gray-200:#E5E7EB;
+  --gray-300:#D1D5DB; --gray-400:#9CA3AF; --gray-500:#6B7280;
+  --gray-600:#4B5563; --gray-700:#374151; --gray-900:#111827;
+  --r:12px; --r-sm:8px;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--gray-50);color:var(--gray-900);min-height:100vh;line-height:1.6}
+h1,h2,h3{font-family:'DM Serif Display',Georgia,serif;line-height:1.2}
+
+/* ── Screens ── */
+.screen{display:none;min-height:100vh;flex-direction:column;align-items:center}
+.screen.active{display:flex}
+
+/* ── Containers ── */
+.wrap{width:100%;max-width:740px;padding:24px 20px}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:32px}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 22px;border-radius:var(--r-sm);font-family:inherit;font-size:.95rem;
+  font-weight:500;cursor:pointer;transition:all .15s;border:none;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-outline{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+.btn-outline:hover{background:var(--blue-lt)}
+.btn-lg{padding:15px 34px;font-size:1.05rem}
+.btn-full{width:100%}
+.btn-sm{padding:7px 14px;font-size:.85rem}
+
+/* ── Forms ── */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:.875rem;font-weight:600;color:var(--gray-700);margin-bottom:5px}
+.req{color:var(--red)}
+.form-control{width:100%;padding:10px 13px;border:1.5px solid var(--gray-300);
+  border-radius:var(--r-sm);font-family:inherit;font-size:.95rem;background:#fff;
+  color:var(--gray-900);transition:border-color .15s}
+.form-control:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,95,168,.1)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+textarea.form-control{resize:vertical;min-height:130px}
+
+/* ── Landing ── */
+.hero{background:linear-gradient(160deg,var(--navy) 0%,#1a3a6b 50%,var(--teal) 100%);
+  color:#fff;padding:52px 20px 40px;text-align:center;width:100%}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.15);
+  padding:4px 14px;border-radius:99px;font-size:.78rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(1.7rem,4vw,2.6rem);margin-bottom:10px}
+.hero p{font-size:1rem;opacity:.82;max-width:540px;margin:0 auto}
+.hero-stats{display:flex;justify-content:center;gap:32px;margin-top:28px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:1.8rem;font-family:'DM Serif Display',serif;font-weight:400}
+.hero-stat .lbl{font-size:.78rem;opacity:.7;margin-top:2px}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.info-tile{background:var(--blue-lt);border-radius:var(--r-sm);padding:14px 16px;border-left:3px solid var(--blue)}
+.info-tile h4{font-family:inherit;font-size:.85rem;font-weight:700;color:var(--blue);margin-bottom:3px}
+.info-tile p{font-size:.8rem;color:var(--gray-600);line-height:1.4}
+
+/* ── Exam header ── */
+.exam-header{background:#fff;border-bottom:1px solid var(--gray-200);
+  padding:10px 20px;width:100%;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:10}
+.exam-header-left{font-size:.85rem;font-weight:600;color:var(--navy)}
+.exam-header-left small{display:block;font-weight:400;color:var(--gray-500);font-size:.75rem;margin-top:1px}
+.timer-wrap{display:flex;align-items:center;gap:6px;font-size:.9rem;font-weight:600;color:var(--gray-600)}
+.timer-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.timer-wrap.warn{color:var(--amber)}
+.timer-wrap.danger{color:var(--red)}
+.timer-wrap.danger .timer-dot{background:var(--red)}
+
+.progress-track{width:100%;height:5px;background:var(--gray-200)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .4s ease}
+
+/* ── Section badge ── */
+.sec-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;
+  border-radius:99px;font-size:.78rem;font-weight:700;margin-bottom:14px}
+.sec-badge.s1{background:var(--blue-lt);color:var(--blue)}
+.sec-badge.s2{background:var(--teal-lt);color:var(--teal)}
+.sec-badge.s3{background:var(--amber-lt);color:var(--amber)}
+.sec-badge.s4{background:var(--green-lt);color:var(--green)}
+.sec-badge.s5{background:var(--purple-lt);color:var(--purple)}
+
+.diff-badge{display:inline-block;padding:2px 7px;border-radius:4px;
+  font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-left:6px}
+.diff-badge.f{background:#E0F2FE;color:#0369A1}
+.diff-badge.i{background:#FEF9C3;color:#854D0E}
+.diff-badge.a{background:#FCE7F3;color:#9D174D}
+
+/* ── Audio player ── */
+.audio-player{background:var(--blue-lt);border-radius:var(--r-sm);
+  padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.play-btn{width:46px;height:46px;border-radius:50%;background:var(--blue);
+  color:#fff;border:none;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:all .15s;font-size:1rem}
+.play-btn:hover{background:var(--navy)}
+.play-btn.playing{background:var(--teal)}
+.play-btn.done{background:var(--gray-400);cursor:not-allowed}
+.audio-info{flex:1}
+.audio-title{font-size:.875rem;font-weight:600;color:var(--navy)}
+.audio-meta{font-size:.76rem;color:var(--gray-500);margin-top:2px}
+.transcript-toggle{font-size:.76rem;color:var(--blue);cursor:pointer;text-decoration:underline;margin-top:4px;display:inline-block}
+.transcript-box{background:#fff;border:1px solid var(--gray-300);border-radius:var(--r-sm);
+  padding:12px 14px;margin-top:10px;font-size:.85rem;color:var(--gray-700);
+  line-height:1.6;display:none}
+.transcript-box.open{display:block}
+
+/* ── Passage ── */
+.passage-box{background:var(--gray-50);border:1px solid var(--gray-200);
+  border-radius:var(--r-sm);padding:18px 20px;margin-bottom:18px;
+  font-size:.92rem;line-height:1.75;color:var(--gray-700)}
+.passage-label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--gray-400);margin-bottom:8px}
+
+/* ── Question ── */
+.q-num{font-size:.8rem;color:var(--gray-500);margin-bottom:4px}
+.q-text{font-size:1rem;font-weight:500;color:var(--gray-900);margin-bottom:18px;line-height:1.55}
+
+/* ── MCQ options ── */
+.options{display:flex;flex-direction:column;gap:9px}
+.opt-btn{display:flex;align-items:flex-start;gap:11px;padding:13px 15px;
+  border-radius:var(--r-sm);border:2px solid var(--gray-200);background:#fff;
+  cursor:pointer;text-align:left;font-family:inherit;font-size:.93rem;
+  color:var(--gray-700);transition:all .15s;width:100%}
+.opt-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-lt)}
+.opt-btn.sel{border-color:var(--blue);background:var(--blue-lt)}
+.opt-btn.correct{border-color:var(--green);background:var(--green-lt)}
+.opt-btn.wrong{border-color:var(--red);background:var(--red-lt)}
+.opt-btn:disabled{cursor:default}
+.opt-letter{width:27px;height:27px;border-radius:50%;border:2px solid var(--gray-300);
+  display:flex;align-items:center;justify-content:center;font-weight:700;
+  font-size:.78rem;flex-shrink:0;color:var(--gray-500)}
+.opt-btn.sel .opt-letter{background:var(--blue);border-color:var(--blue);color:#fff}
+.opt-btn.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff}
+.opt-btn.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff}
+
+.feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-sm);font-size:.875rem}
+.feedback.ok{background:var(--green-lt);border-left:4px solid var(--green);color:var(--green)}
+.feedback.bad{background:var(--red-lt);border-left:4px solid var(--red);color:var(--red)}
+.feedback .expl{color:var(--gray-700);margin-top:5px;font-size:.84rem}
+
+/* ── Writing ── */
+.writing-prompt{font-size:.93rem;font-weight:500;color:var(--gray-800);margin-bottom:10px;line-height:1.5}
+.writing-area{width:100%;min-height:140px;padding:13px;border:2px solid var(--gray-300);
+  border-radius:var(--r-sm);font-family:inherit;font-size:.93rem;
+  color:var(--gray-900);resize:vertical;transition:border-color .15s}
+.writing-area:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,95,168,.08)}
+.char-count{font-size:.76rem;color:var(--gray-400);text-align:right;margin-top:3px}
+
+/* ── Nav bar ── */
+.nav-bar{display:flex;justify-content:space-between;align-items:center;
+  margin-top:22px;padding-top:18px;border-top:1px solid var(--gray-200)}
+
+/* ── Section intro ── */
+.sec-intro{text-align:center;padding:40px 20px}
+.sec-intro-icon{font-size:3rem;margin-bottom:12px}
+.sec-intro h2{font-size:1.6rem;color:var(--navy);margin-bottom:8px}
+.sec-intro p{color:var(--gray-600);max-width:440px;margin:0 auto 24px}
+.sec-intro-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.pill{background:var(--gray-100);border-radius:99px;padding:5px 14px;font-size:.82rem;color:var(--gray-600)}
+
+/* ── Writing review ── */
+.review-header{background:var(--purple-lt);border-radius:var(--r-sm);
+  padding:16px 20px;margin-bottom:20px;border-left:4px solid var(--purple)}
+.review-header h3{font-family:inherit;font-size:1rem;font-weight:700;color:var(--purple)}
+.review-header p{font-size:.85rem;color:var(--gray-600);margin-top:4px}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.ans-box{border-radius:var(--r-sm);padding:14px 16px}
+.ans-box .box-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:7px}
+.ans-box .box-text{font-size:.875rem;line-height:1.65;color:var(--gray-700)}
+.ans-box.yours{background:var(--gray-50);border:1px solid var(--gray-200)}
+.ans-box.yours .box-lbl{color:var(--gray-400)}
+.ans-box.model{background:var(--green-lt);border:1px solid var(--green)}
+.ans-box.model .box-lbl{color:var(--green)}
+
+.rubric-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.rubric-btn{padding:13px;border-radius:var(--r-sm);border:2px solid var(--gray-200);
+  background:#fff;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s}
+.rubric-btn:hover{border-color:var(--blue);background:var(--blue-lt)}
+.rubric-btn.sel{border-color:var(--blue);background:var(--blue-lt)}
+.rubric-btn .rb-score{font-size:1.3rem;font-weight:700;color:var(--blue)}
+.rubric-btn .rb-label{font-size:.83rem;font-weight:600;color:var(--gray-800);margin-top:2px}
+.rubric-btn .rb-desc{font-size:.75rem;color:var(--gray-500);margin-top:3px}
+
+/* ── Results ── */
+.results-hero{background:linear-gradient(160deg,var(--navy),var(--blue));
+  color:#fff;padding:44px 20px 52px;text-align:center;width:100%}
+.results-hero h1{font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:6px}
+.results-hero .candidate-name{font-size:1.1rem;opacity:.82;margin-bottom:24px}
+
+.score-donut{width:130px;height:130px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:8px solid rgba(255,255,255,.25);margin:0 auto}
+.score-donut .score-num{font-size:2.6rem;font-family:'DM Serif Display',serif;line-height:1}
+.score-donut .score-lbl{font-size:.75rem;opacity:.7;margin-top:2px}
+
+.level-card{background:#fff;border-radius:var(--r);padding:22px 24px;
+  margin:-24px 20px 20px;box-shadow:var(--shadow-lg);max-width:740px;width:calc(100% - 40px)}
+.level-card .lc-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.level-card h2{font-size:1.25rem;color:var(--navy)}
+.pass-chip{padding:4px 13px;border-radius:99px;font-size:.83rem;font-weight:700}
+.pass-chip.pass{background:var(--green-lt);color:var(--green)}
+.pass-chip.fail{background:var(--red-lt);color:var(--red)}
+.level-sub{color:var(--gray-600);font-size:.9rem;margin-bottom:12px}
+.fw-tags{display:flex;gap:10px;flex-wrap:wrap}
+.fw-tag{background:var(--gray-100);padding:3px 10px;border-radius:6px;
+  font-size:.78rem;color:var(--gray-600)}
+.fw-tag strong{color:var(--gray-900)}
+
+.scores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin:20px 0}
+.sec-card{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--r-sm);padding:14px}
+.sec-card .sc-lbl{font-size:.76rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em;color:var(--gray-500);margin-bottom:7px}
+.sc-bar{height:5px;background:var(--gray-200);border-radius:3px;margin:5px 0;overflow:hidden}
+.sc-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.sc-fill.good{background:var(--green)}
+.sc-fill.ok{background:var(--amber)}
+.sc-fill.poor{background:var(--red)}
+.sec-card .sc-pct{font-size:1.2rem;font-weight:700;color:var(--gray-900)}
+
+.report-tbl{width:100%;border-collapse:collapse}
+.report-tbl tr{border-bottom:1px solid var(--gray-200)}
+.report-tbl tr:last-child{border-bottom:none}
+.report-tbl td{padding:9px 0;font-size:.875rem}
+.report-tbl td:first-child{color:var(--gray-500)}
+.report-tbl td:last-child{font-weight:600;text-align:right}
+
+.alert{padding:13px 15px;border-radius:var(--r-sm);margin-bottom:14px;font-size:.875rem}
+.alert-warn{background:var(--amber-lt);border-left:4px solid var(--amber);color:var(--amber)}
+.alert-danger{background:var(--red-lt);border-left:4px solid var(--red);color:var(--red)}
+
+/* ── Certificate ── */
+.cert-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.cert-overlay.open{display:flex}
+.cert-inner{background:#fff;max-width:680px;width:100%;max-height:92vh;
+  overflow-y:auto;border-radius:var(--r);box-shadow:var(--shadow-lg)}
+.cert-body{padding:36px;text-align:center;border:6px solid var(--navy);
+  margin:12px;border-radius:10px;position:relative}
+.cc{position:absolute;width:38px;height:38px;border-style:solid;border-color:var(--blue)}
+.cc.tl{top:8px;left:8px;border-width:3px 0 0 3px}
+.cc.tr{top:8px;right:8px;border-width:3px 3px 0 0}
+.cc.bl{bottom:8px;left:8px;border-width:0 0 3px 3px}
+.cc.br{bottom:8px;right:8px;border-width:0 3px 3px 0}
+.cert-org{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:16px}
+.cert-title{font-size:1.5rem;color:var(--navy);margin-bottom:4px}
+.cert-subtitle{font-size:.85rem;color:var(--gray-400);letter-spacing:.07em;text-transform:uppercase;margin-bottom:22px}
+.cert-presents{font-size:.9rem;color:var(--gray-500);margin-bottom:6px}
+.cert-name{font-size:2rem;color:var(--navy);border-bottom:2px solid var(--blue);
+  padding-bottom:6px;display:inline-block;margin:6px 0 18px}
+.cert-desc{font-size:.875rem;color:var(--gray-600);line-height:1.65;margin-bottom:18px;max-width:480px;margin-left:auto;margin-right:auto}
+.cert-level-box{background:var(--blue-lt);border-radius:var(--r-sm);
+  padding:14px 28px;display:inline-block;margin-bottom:18px}
+.clb-num{font-size:1.7rem;font-weight:700;color:var(--blue)}
+.clb-name{font-size:1.05rem;color:var(--navy);font-weight:600}
+.clb-equiv{font-size:.78rem;color:var(--gray-500);margin-top:3px}
+.cert-meta{display:flex;justify-content:space-between;margin-top:28px;
+  padding-top:16px;border-top:1px solid var(--gray-200);font-size:.75rem;color:var(--gray-400)}
+.cert-actions{padding:16px 24px;display:flex;gap:10px;justify-content:flex-end}
+
+/* ── Misc ── */
+hr.div{border:none;border-top:1px solid var(--gray-200);margin:22px 0}
+.mt-4{margin-top:16px} .mt-6{margin-top:24px} .mb-4{margin-bottom:16px}
+.text-center{text-align:center} .text-sm{font-size:.875rem} .text-muted{color:var(--gray-500)}
+.flex{display:flex} .items-center{align-items:center} .gap-2{gap:8px} .justify-between{justify-content:space-between}
+.font-bold{font-weight:700}
+.hidden{display:none}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr}
+  .info-grid{grid-template-columns:1fr}
+  .compare-grid{grid-template-columns:1fr}
+  .rubric-grid{grid-template-columns:1fr}
+  .scores-grid{grid-template-columns:1fr 1fr}
+  .card{padding:20px}
+  .cert-body{padding:24px}
+}
+@media print{
+  body *{visibility:hidden}
+  .cert-overlay,.cert-overlay *{visibility:visible}
+  .cert-overlay{position:absolute;left:0;top:0;padding:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN: LANDING / REGISTRATION
+═══════════════════════════════════════════════════════ -->
+<div id="sc-landing" class="screen active">
+  <div class="hero">
+    <div class="hero-badge">ACTFL-Aligned · Adaptive</div>
+    <h1>Bilingual Healthcare<br>ESL Proficiency Assessment</h1>
+    <p>Evaluate your English communication skills for patient-facing healthcare roles</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">50</div><div class="lbl">Questions</div></div>
+      <div class="hero-stat"><div class="num">90</div><div class="lbl">Minutes</div></div>
+      <div class="hero-stat"><div class="num">5</div><div class="lbl">Domains</div></div>
+      <div class="hero-stat"><div class="num">7</div><div class="lbl">ACTFL Levels</div></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="card mb-4">
+      <h2 style="font-size:1.3rem;color:var(--navy);margin-bottom:6px">About This Assessment</h2>
+      <p class="text-sm text-muted" style="margin-bottom:16px">
+        This adaptive exam measures your English proficiency for healthcare communication, including listening comprehension, grammar, and written expression. Results map to the ACTFL proficiency scale.
+      </p>
+      <div class="info-grid">
+        <div class="info-tile">
+          <h4>🎧 Listening (20 items)</h4>
+          <p>Part 1: Short healthcare phrases · Part 2: Clinical dialogs &amp; conversations</p>
+        </div>
+        <div class="info-tile">
+          <h4>📝 Grammar (20 items)</h4>
+          <p>Fill in the blank, identify errors, sentence correction, clinical phrasing</p>
+        </div>
+        <div class="info-tile">
+          <h4>📖 Writing Part A (5 items)</h4>
+          <p>Read a healthcare passage and write a response in complete sentences</p>
+        </div>
+        <div class="info-tile">
+          <h4>✍️ Writing Part B (5 items)</h4>
+          <p>Listen to an audio clip and write your answer in complete sentences</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1.2rem;color:var(--navy);margin-bottom:18px">Candidate Registration</h2>
+      <form id="reg-form" onsubmit="return false">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name <span class="req">*</span></label>
+            <input id="reg-first" class="form-control" type="text" placeholder="Maria" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name <span class="req">*</span></label>
+            <input id="reg-last" class="form-control" type="text" placeholder="Santos" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address <span class="req">*</span></label>
+          <input id="reg-email" class="form-control" type="email" placeholder="maria.santos@example.com" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Job Role <span class="req">*</span></label>
+            <select id="reg-role" class="form-control" required>
+              <option value="">— Select your role —</option>
+              <option>Community Health Worker (CHW)</option>
+              <option>Patient Navigator</option>
+              <option>Social Worker / Case Manager</option>
+              <option>Registration Staff</option>
+              <option>Medical Assistant (MA)</option>
+              <option>Nurse / Healthcare Provider</option>
+              <option>Health Educator</option>
+              <option>Outreach Worker</option>
+              <option>Care Coordinator</option>
+              <option>Customer Service Representative</option>
+              <option>Other Healthcare Staff</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Organization / Employer</label>
+            <input id="reg-org" class="form-control" type="text" placeholder="Healthcare System / Clinic">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Language Background</label>
+          <select id="reg-lang" class="form-control">
+            <option value="">— Select —</option>
+            <option>Spanish (primary) / Learning English</option>
+            <option>English (primary) / Learning Spanish</option>
+            <option>Bilingual (Spanish–English)</option>
+            <option>Other language background</option>
+          </select>
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-start;gap:10px">
+          <input type="checkbox" id="reg-consent" style="margin-top:3px;flex-shrink:0">
+          <label for="reg-consent" class="text-sm text-muted">
+            I understand this is a proficiency assessment. I will complete the exam independently without assistance. My results will be used solely to evaluate my language proficiency for healthcare communication purposes.
+          </label>
+        </div>
+        <div id="reg-error" class="alert alert-danger hidden" style="margin-bottom:12px"></div>
+        <button type="button" class="btn btn-primary btn-lg btn-full" onclick="startExam()">
+          Begin Assessment →
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN: EXAM
+═══════════════════════════════════════════════════════ -->
+<div id="sc-exam" class="screen">
+  <div class="exam-header" id="exam-header">
+    <div class="exam-header-left">
+      <span id="hdr-section">Section 1</span>
+      <small id="hdr-name"></small>
+    </div>
+    <div class="timer-wrap" id="timer-wrap">
+      <div class="timer-dot"></div>
+      <span id="timer-display">90:00</span>
+    </div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Section intro card (shown before each section) -->
+  <div class="wrap" id="sec-intro-wrap" style="display:none">
+    <div class="card">
+      <div class="sec-intro">
+        <div class="sec-intro-icon" id="si-icon"></div>
+        <h2 id="si-title"></h2>
+        <p id="si-desc"></p>
+        <div class="sec-intro-pills" id="si-pills"></div>
+        <button class="btn btn-primary btn-lg" onclick="dismissSectionIntro()">Start This Section →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question card -->
+  <div class="wrap" id="q-wrap">
+    <div class="card question-card" id="q-card">
+      <div class="flex items-center gap-2" style="margin-bottom:14px">
+        <span class="sec-badge" id="q-sec-badge"></span>
+        <span class="diff-badge" id="q-diff-badge"></span>
+      </div>
+      <div class="q-num" id="q-num"></div>
+
+      <!-- Audio player (listening questions) -->
+      <div id="audio-player" class="audio-player hidden">
+        <button class="play-btn" id="play-btn" onclick="toggleAudio()">▶</button>
+        <div class="audio-info">
+          <div class="audio-title" id="audio-title"></div>
+          <div class="audio-meta" id="audio-meta"></div>
+          <span class="transcript-toggle" onclick="toggleTranscript()">Show transcript (accessibility)</span>
+          <div class="transcript-box" id="transcript-box"></div>
+        </div>
+      </div>
+
+      <!-- Passage (writing_read questions) -->
+      <div id="passage-player" class="hidden">
+        <div class="passage-box">
+          <div class="passage-label">Read the following passage:</div>
+          <div id="passage-text"></div>
+        </div>
+      </div>
+
+      <div class="q-text" id="q-text"></div>
+
+      <!-- MCQ options -->
+      <div class="options hidden" id="mcq-options"></div>
+
+      <!-- Writing textarea -->
+      <div id="writing-area-wrap" class="hidden">
+        <div class="writing-prompt" id="writing-prompt"></div>
+        <textarea class="writing-area" id="writing-input" placeholder="Write your answer here in complete sentences…" oninput="updateCharCount()"></textarea>
+        <div class="char-count" id="char-count">0 characters</div>
+      </div>
+
+      <!-- Feedback (MCQ) -->
+      <div id="feedback-box" class="hidden"></div>
+
+      <div class="nav-bar">
+        <div id="q-progress-text" class="text-sm text-muted"></div>
+        <div style="display:flex;gap:9px">
+          <button class="btn btn-primary hidden" id="confirm-btn" onclick="confirmAnswer()">Confirm Answer</button>
+          <button class="btn btn-primary hidden" id="next-btn" onclick="nextQuestion()">Next →</button>
+          <button class="btn btn-primary hidden" id="writing-next-btn" onclick="saveWritingAndNext()">Save &amp; Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Early termination notice -->
+    <div id="early-term-notice" class="alert alert-danger hidden" style="margin-top:12px">
+      <strong>Early Termination:</strong> The incorrect answer threshold has been reached. The assessment will complete with your answers to date.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN: WRITING REVIEW
+═══════════════════════════════════════════════════════ -->
+<div id="sc-writing-review" class="screen">
+  <div class="exam-header">
+    <div class="exam-header-left">
+      Writing Self-Assessment
+      <small>Review each answer and rate your response</small>
+    </div>
+    <div class="timer-wrap" id="wr-timer-wrap">
+      <div class="timer-dot"></div>
+      <span id="wr-timer-display">90:00</span>
+    </div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="wr-progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="review-header">
+        <h3 id="wr-section-label">Writing Section Review</h3>
+        <p>Compare your answer to the model response and rate your performance honestly.</p>
+      </div>
+
+      <div class="sec-badge" id="wr-sec-badge" style="margin-bottom:12px"></div>
+
+      <!-- Writing review audio player -->
+      <div id="wr-audio-player" class="audio-player hidden">
+        <button class="play-btn" id="wr-play-btn" onclick="toggleReviewAudio()">▶</button>
+        <div class="audio-info">
+          <div class="audio-title">Listen again</div>
+          <div class="audio-meta" id="wr-audio-meta"></div>
+          <span class="transcript-toggle" onclick="toggleReviewTranscript()">Show transcript</span>
+          <div class="transcript-box" id="wr-transcript-box"></div>
+        </div>
+      </div>
+
+      <!-- Passage for writing_read review -->
+      <div id="wr-passage-player" class="hidden">
+        <div class="passage-box">
+          <div class="passage-label">Passage you read:</div>
+          <div id="wr-passage-text"></div>
+        </div>
+      </div>
+
+      <p class="q-text" id="wr-q-text"></p>
+
+      <div class="compare-grid">
+        <div class="ans-box yours">
+          <div class="box-lbl">Your Answer</div>
+          <div class="box-text" id="wr-your-answer"></div>
+        </div>
+        <div class="ans-box model">
+          <div class="box-lbl">Model Answer</div>
+          <div class="box-text" id="wr-model-answer"></div>
+        </div>
+      </div>
+
+      <hr class="div">
+      <p class="text-sm font-bold" style="margin-bottom:6px;color:var(--gray-700)">Rate your response:</p>
+      <div class="rubric-grid" id="rubric-grid">
+        <button class="rubric-btn" onclick="selectSelfScore(4)">
+          <div class="rb-score">4 / 4</div>
+          <div class="rb-label">Accurate &amp; Complete</div>
+          <div class="rb-desc">Covered all key points clearly</div>
+        </button>
+        <button class="rubric-btn" onclick="selectSelfScore(3)">
+          <div class="rb-score">3 / 4</div>
+          <div class="rb-label">Mostly Accurate</div>
+          <div class="rb-desc">Most key points present, minor gaps</div>
+        </button>
+        <button class="rubric-btn" onclick="selectSelfScore(2)">
+          <div class="rb-score">2 / 4</div>
+          <div class="rb-label">Partially Accurate</div>
+          <div class="rb-desc">Some key content missing or unclear</div>
+        </button>
+        <button class="rubric-btn" onclick="selectSelfScore(1)">
+          <div class="rb-score">1 / 4</div>
+          <div class="rb-label">Needs Improvement</div>
+          <div class="rb-desc">Key points missing or inaccurate</div>
+        </button>
+      </div>
+
+      <div class="nav-bar">
+        <div class="text-sm text-muted" id="wr-progress-text"></div>
+        <button class="btn btn-primary" id="wr-next-btn" onclick="nextWritingReview()" disabled>Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN: RESULTS
+═══════════════════════════════════════════════════════ -->
+<div id="sc-results" class="screen">
+  <div class="results-hero">
+    <h1>Assessment Complete</h1>
+    <div class="candidate-name" id="res-name"></div>
+    <div class="score-donut" id="score-donut">
+      <div class="score-num" id="res-score-num">--</div>
+      <div class="score-lbl">Overall Score</div>
+    </div>
+  </div>
+
+  <div class="level-card" id="level-card">
+    <div class="lc-top">
+      <h2 id="res-level-name"></h2>
+      <span class="pass-chip" id="pass-chip"></span>
+    </div>
+    <p class="level-sub" id="res-level-sub"></p>
+    <div class="fw-tags" id="fw-tags"></div>
+  </div>
+
+  <div class="wrap" style="margin-top:8px">
+    <div id="early-term-alert" class="alert alert-warn hidden">
+      <strong>Note:</strong> This assessment ended early because the incorrect-answer rate exceeded 35%. Your score reflects performance on questions completed.
+    </div>
+
+    <div class="card mb-4">
+      <h3 style="font-size:1.1rem;color:var(--navy);margin-bottom:14px">Section Scores</h3>
+      <div class="scores-grid" id="scores-grid"></div>
+    </div>
+
+    <div class="card mb-4">
+      <h3 style="font-size:1.1rem;color:var(--navy);margin-bottom:14px">Full Report</h3>
+      <table class="report-tbl" id="report-tbl"></table>
+    </div>
+
+    <div class="card mb-4">
+      <h3 style="font-size:1.1rem;color:var(--navy);margin-bottom:10px">Recommended Job Functions</h3>
+      <p class="text-sm text-muted" id="res-roles"></p>
+    </div>
+
+    <div class="card mb-4">
+      <h3 style="font-size:1.1rem;color:var(--navy);margin-bottom:10px">Interpreter Utilization Recommendation</h3>
+      <p class="text-sm text-muted" id="res-interp"></p>
+    </div>
+
+    <div id="cert-actions" class="hidden" style="text-align:center;margin-bottom:24px">
+      <p class="text-muted text-sm mb-4">You have achieved a passing proficiency level. Download your certificate:</p>
+      <button class="btn btn-primary btn-lg" onclick="openCertificate()">View &amp; Print Certificate</button>
+    </div>
+
+    <div style="text-align:center;margin-bottom:32px">
+      <button class="btn btn-outline" onclick="restartExam()">Retake Assessment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CERTIFICATE OVERLAY
+═══════════════════════════════════════════════════════ -->
+<div class="cert-overlay" id="cert-overlay">
+  <div class="cert-inner">
+    <div class="cert-actions">
+      <button class="btn btn-outline btn-sm" onclick="window.print()">🖨 Print / Save PDF</button>
+      <button class="btn btn-sm" style="background:var(--gray-100);color:var(--gray-700)" onclick="closeCertificate()">✕ Close</button>
+    </div>
+    <div class="cert-body">
+      <div class="cc tl"></div><div class="cc tr"></div>
+      <div class="cc bl"></div><div class="cc br"></div>
+      <div class="cert-org">Bilingual Healthcare Proficiency Assessment Program</div>
+      <h2 class="cert-title">Certificate of Proficiency</h2>
+      <p class="cert-subtitle">English for Healthcare Communication</p>
+      <p class="cert-presents">This certifies that</p>
+      <div class="cert-name" id="cert-name"></div>
+      <p class="cert-desc" id="cert-desc"></p>
+      <div class="cert-level-box">
+        <div class="clb-num" id="cert-level-num"></div>
+        <div class="clb-name" id="cert-level-name"></div>
+        <div class="clb-equiv" id="cert-level-equiv"></div>
+      </div>
+      <div class="cert-meta">
+        <span id="cert-date"></span>
+        <span id="cert-id"></span>
+        <span id="cert-role"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+//  QUESTION BANK
+// ================================================================
+const QUESTIONS = [
+// ── LISTENING PART 1: Short Phrases (Q0-Q9) ──────────────────
+{id:1,sec:'s1',diff:'f',type:'mcq',
+ audioText:"Please take one tablet by mouth twice daily with food.",
+ audioRate:0.88,
+ q:"What does the healthcare provider instruct about taking the medication?",
+ opts:["Take one tablet once daily on an empty stomach","Take one tablet twice daily with food","Take two tablets once daily with water","Take one tablet at bedtime"],
+ correct:1,
+ expl:"The instruction is to take one tablet twice daily (morning and evening) and always with food to protect the stomach."},
+
+{id:2,sec:'s1',diff:'f',type:'mcq',
+ audioText:"Your appointment is confirmed for Monday, March tenth, at two-thirty in the afternoon.",
+ audioRate:0.88,
+ q:"When is the patient's appointment?",
+ opts:["Tuesday at 2:00 PM","Monday at 2:00 PM","Monday at 2:30 PM","Monday at 3:30 PM"],
+ correct:2,
+ expl:"The appointment is Monday, March 10th, at 2:30 PM."},
+
+{id:3,sec:'s1',diff:'f',type:'mcq',
+ audioText:"I need to take your blood pressure. Please remove your jacket and relax your arm on the table.",
+ audioRate:0.88,
+ q:"What does the healthcare worker ask the patient to do?",
+ opts:["Remove their shirt and stand up","Roll up their sleeve and make a fist","Remove their jacket and relax their arm on the table","Sit on the exam table and take a deep breath"],
+ correct:2,
+ expl:"The worker asks the patient to remove their jacket and relax their arm on the table so the blood pressure cuff can be placed properly."},
+
+{id:4,sec:'s1',diff:'i',type:'mcq',
+ audioText:"Your blood pressure is a little high today — one hundred forty over ninety. We would like you to monitor it at home for two weeks and avoid salty foods.",
+ audioRate:0.88,
+ q:"What is the patient's blood pressure reading?",
+ opts:["130 over 90","140 over 80","140 over 90","150 over 80"],
+ correct:2,
+ expl:"The blood pressure was stated as 140/90."},
+
+{id:5,sec:'s1',diff:'i',type:'mcq',
+ audioText:"The doctor wants you to have a fasting blood test. That means no food or drink except water for eight hours before the test.",
+ audioRate:0.88,
+ q:"How long must the patient fast before the blood test?",
+ opts:["Four hours","Six hours","Eight hours","Twelve hours"],
+ correct:2,
+ expl:"The instructions state no food or drink except water for eight hours before the test."},
+
+{id:6,sec:'s1',diff:'i',type:'mcq',
+ audioText:"If you experience any side effects such as dizziness, nausea, or difficulty breathing, stop taking the medication and call our office immediately.",
+ audioRate:0.88,
+ q:"What should the patient do if they experience side effects?",
+ opts:["Take a lower dose and monitor symptoms","Wait 24 hours before calling the doctor","Stop the medication and call the office immediately","Take the medication with food to reduce side effects"],
+ correct:2,
+ expl:"The patient is told to stop the medication and call immediately if they experience any of those side effects."},
+
+{id:7,sec:'s1',diff:'a',type:'mcq',
+ audioText:"The consent form outlines the risks associated with the procedure, including infection, bleeding, and in rare cases, damage to surrounding tissue. Please read it carefully and ask any questions before signing.",
+ audioRate:0.88,
+ q:"What does the consent form describe?",
+ opts:["The expected benefits and recovery time","Insurance and billing requirements","Risks including infection, bleeding, and possible tissue damage","The pre-operative dietary restrictions"],
+ correct:2,
+ expl:"The consent form outlines risks: infection, bleeding, and in rare cases, damage to surrounding tissue."},
+
+{id:8,sec:'s1',diff:'a',type:'mcq',
+ audioText:"Your most recent echocardiogram shows preserved ejection fraction with diastolic dysfunction, grade two. We will start you on a low-dose diuretic and schedule a follow-up in six weeks.",
+ audioRate:0.88,
+ q:"What does the echocardiogram show?",
+ opts:["Reduced ejection fraction requiring immediate intervention","Normal heart function with no abnormalities","Preserved ejection fraction with grade 2 diastolic dysfunction","Severe systolic dysfunction requiring hospitalization"],
+ correct:2,
+ expl:"The echocardiogram showed preserved ejection fraction with grade 2 diastolic dysfunction."},
+
+{id:9,sec:'s1',diff:'f',type:'mcq',
+ audioText:"Please sign in at the front desk and have your insurance card and photo identification ready.",
+ audioRate:0.88,
+ q:"What should the patient have ready at the front desk?",
+ opts:["Only their insurance card","Their insurance card and photo ID","A co-payment and referral form","Their medical history and a list of medications"],
+ correct:1,
+ expl:"The patient needs both their insurance card and photo identification at the front desk."},
+
+{id:10,sec:'s1',diff:'i',type:'mcq',
+ audioText:"This medication can make you drowsy. You should not drive or operate heavy machinery while taking it. Alcohol will increase this effect.",
+ audioRate:0.88,
+ q:"What is warned about this medication?",
+ opts:["It should always be taken with food","It can cause drowsiness; avoid driving and alcohol while taking it","It must be refrigerated after opening","It should not be taken with other medications"],
+ correct:1,
+ expl:"The medication causes drowsiness, so the patient must not drive, operate machinery, or consume alcohol while taking it."},
+
+// ── LISTENING PART 2: Healthcare Dialogs (Q10-Q19) ──────────
+{id:11,sec:'s2',diff:'i',type:'mcq',
+ audioText:"Nurse: Before you leave, I want to go over your discharge instructions. You had a knee procedure, so for the next 48 hours, rest and keep your leg elevated above the level of your heart. Apply ice for 20 minutes every 2 hours to reduce swelling. Patient: Can I take ibuprofen for pain? Nurse: Dr. Kim prescribed you a mild pain reliever. Take one tablet every six hours as needed. Avoid ibuprofen and aspirin for the next two weeks as they can increase bleeding. Call us immediately if you notice increased swelling, redness, warmth, or significantly worse pain.",
+ audioRate:0.85,
+ q:"What medication should the patient AVOID for two weeks after the procedure?",
+ opts:["The prescribed pain reliever","Acetaminophen and antihistamines","Ibuprofen and aspirin","All over-the-counter medications"],
+ correct:2,
+ expl:"The nurse specifically said to avoid ibuprofen and aspirin for two weeks because they can increase bleeding."},
+
+{id:12,sec:'s2',diff:'i',type:'mcq',
+ audioText:"Pharmacist: I see the doctor prescribed Metformin 500 milligrams for your type 2 diabetes. You will take this twice a day — once with breakfast and once with dinner. Patient: Are there side effects? Pharmacist: The most common side effects are stomach upset, nausea, and diarrhea, especially when you first start. Taking it with food helps reduce these. Contact your doctor if you experience muscle pain or weakness. That is rare but something we watch for. Patient: How soon will I see results? Pharmacist: It can take a few weeks to see the full effect on your blood sugar. Keep all follow-up appointments and continue monitoring your blood sugar at home.",
+ audioRate:0.85,
+ q:"When should the patient take Metformin?",
+ opts:["Once daily at bedtime","Three times daily with all meals","Twice daily — once with breakfast and once with dinner","Once with breakfast only"],
+ correct:2,
+ expl:"The pharmacist clearly stated: twice a day — once with breakfast and once with dinner."},
+
+{id:13,sec:'s2',diff:'i',type:'mcq',
+ audioText:"Doctor: I am Dr. Patel. I will perform your colonoscopy tomorrow. The procedure takes about 30 to 45 minutes. You will receive sedation through your IV so you will be comfortable. We will insert a flexible scope to examine your large intestine. If we find polyps, we will remove them during the procedure. Patient: Is it painful? Doctor: Most patients do not remember the procedure due to the sedation. You might feel some bloating afterward from the air we use, but that passes quickly. You will need someone to drive you home since you cannot drive after sedation. Plan to rest for the rest of the day.",
+ audioRate:0.85,
+ q:"Why can't the patient drive themselves home after the colonoscopy?",
+ opts:["The procedure takes too long and they will be tired","They will receive sedation and cannot drive afterward","Hospital policy requires a transportation escort","They may feel too bloated and uncomfortable to drive safely"],
+ correct:1,
+ expl:"The doctor said patients cannot drive after sedation — they need someone else to drive them home."},
+
+{id:14,sec:'s2',diff:'a',type:'mcq',
+ audioText:"Provider: I see you are allergic to penicillin. What reaction did you have? Patient: I got hives and my throat felt tight. Provider: That sounds like a significant allergic reaction. I want to be careful because you have a sinus infection and need an antibiotic. I am prescribing Azithromycin — it is in a different class from penicillin so the cross-reaction risk is low, but watch carefully for hives, difficulty breathing, or throat tightness. Patient: Should I use my EpiPen if that happens? Provider: Yes. If you develop those symptoms, use the EpiPen and go directly to the emergency room or call 911. Do not wait to see if it gets better.",
+ audioRate:0.85,
+ q:"What should the patient do if they develop symptoms of an allergic reaction to the new antibiotic?",
+ opts:["Take Benadryl and call the office in the morning","Reduce the dose and monitor for 24 hours","Stop the medication and wait for it to clear","Use the EpiPen and go to the emergency room or call 911 immediately"],
+ correct:3,
+ expl:"The provider specifically instructed: use the EpiPen and go to the ER or call 911. Do not wait."},
+
+{id:15,sec:'s2',diff:'a',type:'mcq',
+ audioText:"Social Worker: Your doctor is concerned about your mood lately. Can you tell me about how you have been feeling? Patient: I have been very sad since my mother passed away three months ago. I cannot sleep, I lost my appetite, and I do not enjoy things I used to love. Social Worker: I am so sorry for your loss. What you describe sounds like grief, but it may also be clinical depression, and there are effective treatments. I would like to refer you to a behavioral health specialist. Patient: I do not want medication. Social Worker: I completely respect that. Cognitive behavioral therapy, which we call CBT, has excellent results for what you are experiencing. Would you be open to just meeting with someone first?",
+ audioRate:0.85,
+ q:"What type of non-medication therapy does the social worker suggest?",
+ opts:["Group grief counseling","In-patient psychiatric treatment","Cognitive behavioral therapy (CBT)","Medication management with a psychiatrist"],
+ correct:2,
+ expl:"The social worker suggested cognitive behavioral therapy (CBT) as an option that does not involve medication."},
+
+{id:16,sec:'s2',diff:'f',type:'mcq',
+ audioText:"Receptionist: Hillside Family Practice, how can I help you? Patient: I need to refill my blood pressure medication. I have about a week left. Receptionist: Can I get your name and date of birth? Patient: Maria Santos, January 15, 1978. Receptionist: And which medication? Patient: Lisinopril, 20 milligrams. Receptionist: I will send a refill request to your doctor. It usually takes 24 to 48 hours to process. Your pharmacy will contact you when it is ready. Patient: Thank you.",
+ audioRate:0.85,
+ q:"How long will it take for the prescription refill to be processed?",
+ opts:["A few hours","24 to 48 hours","3 to 5 business days","One week"],
+ correct:1,
+ expl:"The receptionist said refill requests usually take 24 to 48 hours to process."},
+
+{id:17,sec:'s2',diff:'i',type:'mcq',
+ audioText:"Health Educator: Today we will talk about the glycemic index and how foods affect blood sugar. Foods with a high glycemic index — like white bread, white rice, and sugary drinks — cause your blood sugar to spike quickly. Foods with a low glycemic index — like whole grains, most vegetables, and legumes — cause a slower, more steady rise. Patient: What about fruit? Health Educator: Great question. Whole fruit is better than fruit juice. The fiber in whole fruit slows sugar absorption. However, portion size still matters. Patient: Can I ever eat white rice? Health Educator: Yes, in moderation. Pairing higher glycemic foods with protein and healthy fat slows absorption and reduces the blood sugar spike.",
+ audioRate:0.85,
+ q:"Why is whole fruit better than fruit juice for people with diabetes?",
+ opts:["Fruit juice has far more calories per serving","Whole fruit has fiber that slows sugar absorption","Fruit juice contains more added sugars","Whole fruit has fewer total carbohydrates"],
+ correct:1,
+ expl:"The health educator explained that the fiber in whole fruit slows sugar absorption, which is why it is preferable to juice."},
+
+{id:18,sec:'s2',diff:'a',type:'mcq',
+ audioText:"Palliative Care Nurse: You have had a chance to read about advance directives. Do you have questions? Family Member: What is the difference between a healthcare proxy and a living will? Palliative Care Nurse: A healthcare proxy — also called a healthcare power of attorney — designates a specific person to make medical decisions on your behalf if you cannot communicate. A living will is a document where you state your own wishes about specific treatments, like whether you want CPR, mechanical ventilation, or artificial nutrition. Family Member: Can someone have both? Palliative Care Nurse: Absolutely. We actually recommend it. Your proxy can make decisions for situations you did not anticipate, while your living will provides specific guidance for common scenarios.",
+ audioRate:0.85,
+ q:"What is the key difference between a healthcare proxy and a living will?",
+ opts:["A proxy covers emergencies only; a living will covers chronic illness","A proxy designates a person to decide; a living will states the patient's own specific wishes","A proxy requires an attorney; a living will does not","A proxy is only advisory; a living will is legally binding"],
+ correct:1,
+ expl:"The nurse explained: a healthcare proxy names a decision-maker; a living will documents the patient's own wishes about specific treatments."},
+
+{id:19,sec:'s2',diff:'i',type:'mcq',
+ audioText:"Nurse Hotline: How can I help you tonight? Parent: My son is 18 months old and has a fever of 102.5. He has been fussy and not eating since this morning. Nurse: Is he responding to you, making eye contact, and staying alert? Parent: He is sleepy but wakes up and cries. Nurse: That sounds within normal range. You can give children's Tylenol based on his weight for comfort. Make sure he drinks fluids. Take him to the ER if the fever goes above 104, if he becomes very difficult to wake, develops a rash, or if you are ever simply too worried to wait.",
+ audioRate:0.85,
+ q:"Under what condition should the parent take the child to the emergency room?",
+ opts:["If the fever lasts more than 24 hours","If the child refuses to eat for 12 hours","If the fever goes above 104 or the child becomes very difficult to wake","If the child continues to be fussy and irritable"],
+ correct:2,
+ expl:"The nurse said to go to the ER if the fever goes above 104 degrees or the child becomes very difficult to wake, develops a rash, or if the parent is simply too worried."},
+
+{id:20,sec:'s2',diff:'a',type:'mcq',
+ audioText:"Pharmacist: I am doing a medication reconciliation. Can you tell me all your current medications — including over-the-counter, vitamins, and herbal supplements? Patient: I take Warfarin 5 milligrams daily, Metoprolol 25 milligrams twice daily, and Lisinopril 10 milligrams once daily. Oh, and fish oil and sometimes green tea extract for energy. Pharmacist: I am glad you mentioned the fish oil and green tea extract because both can increase the blood-thinning effects of Warfarin. I will flag this for the cardiologist. Your INR will need to be monitored more closely. Have you had unusual bruising or bleeding lately? Patient: My gums do bleed more than usual when I brush.",
+ audioRate:0.85,
+ q:"Why does the pharmacist flag the fish oil and green tea extract?",
+ opts:["They interact with Metoprolol and affect heart rate","They are not allowed for any hospitalized patient","They can increase the blood-thinning effect of Warfarin","The hospital has a policy against herbal supplements"],
+ correct:2,
+ expl:"The pharmacist flagged both supplements because they can increase the anticoagulant (blood-thinning) effects of Warfarin, which could increase bleeding risk."},
+
+// ── GRAMMAR (Q20-Q39) ─────────────────────────────────────
+{id:21,sec:'s3',diff:'f',type:'mcq',
+ q:'Fill in the blank: The patient _____ not eaten anything since midnight as instructed.',
+ opts:['have','has','is','was'],
+ correct:1,
+ expl:'"Has not eaten" is correct because "the patient" is third-person singular and this is present perfect tense indicating an action that began in the past and continues to now.'},
+
+{id:22,sec:'s3',diff:'f',type:'mcq',
+ q:'Choose the INCORRECT word in the sentence: "The doctor prescribed a new medicine to alleviate the patient\'s pained."',
+ opts:['"prescribed" should be "prescripted"','"alleviate" should be "alleviated"','"pained" should be "pain"','"new" should be "newest"'],
+ correct:2,
+ expl:'"Pained" is the incorrect word. The correct noun form is "pain." "Pained" is an adjective (e.g., "a pained expression").'},
+
+{id:23,sec:'s3',diff:'f',type:'mcq',
+ q:'Fill in the blank: "Please _____ your full name at the top of this form."',
+ opts:['writes','written','writing','write'],
+ correct:3,
+ expl:'The imperative form "write" is correct for a direct instruction. "Writes" is third-person singular present, not imperative.'},
+
+{id:24,sec:'s3',diff:'i',type:'mcq',
+ q:'Fill in the blank: "By the time the ambulance arrived, the patient _____ consciousness."',
+ opts:['loses','lost','has lost','had lost'],
+ correct:3,
+ expl:'"Had lost" (past perfect) is correct because the loss of consciousness happened BEFORE the ambulance arrived — the past perfect shows the earlier of two past actions.'},
+
+{id:25,sec:'s3',diff:'i',type:'mcq',
+ q:'Fill in the blank: "The doctor recommended that the patient _____ their diet to reduce sodium intake."',
+ opts:['modifies','will modify','has modified','modify'],
+ correct:3,
+ expl:'After "recommended that," English uses the subjunctive mood: "modify" (not "modifies"). The subjunctive base form is used regardless of subject.'},
+
+{id:26,sec:'s3',diff:'i',type:'mcq',
+ q:'Choose the INCORRECT word or phrase: "Despite of taking the antibiotics as prescribed, the infection did not clear."',
+ opts:['"Despite of" should be "Despite"','"prescribed" should be "prescripted"','"did not" should be "does not"','"clear" should be "cleared"'],
+ correct:0,
+ expl:'"Despite" is not followed by "of." The correct usage is "Despite taking…" — "despite" is a preposition that takes a noun or gerund directly.'},
+
+{id:27,sec:'s3',diff:'i',type:'mcq',
+ q:'Choose the CORRECT phrase: "The nurse administered the medication _____ the doctor\'s orders."',
+ opts:['according to','accordingly to','basing on','depend on'],
+ correct:0,
+ expl:'"According to" is the correct prepositional phrase. "Accordingly to" and "basing on" are not standard English. "Depend on" changes the meaning entirely.'},
+
+{id:28,sec:'s3',diff:'a',type:'mcq',
+ q:'Fill in the blank: "If the patient _____ taken the full course of antibiotics, the infection would not have returned."',
+ opts:['has','would have','had','would'],
+ correct:2,
+ expl:'"Had taken" is the correct third conditional form. For past unreal conditions: "If + had + past participle, would have + past participle."'},
+
+{id:29,sec:'s3',diff:'a',type:'mcq',
+ q:'Choose the word that best expresses a MANDATORY clinical requirement: "The medication _____ be administered intravenously."',
+ opts:['might','could','would','must'],
+ correct:3,
+ expl:'"Must" expresses an absolute requirement. "Might" and "could" express possibility. "Would" expresses conditional or future action, not an obligation.'},
+
+{id:30,sec:'s3',diff:'i',type:'mcq',
+ q:'Choose the INCORRECT word: "The patient was adviced to follow up with her primary care physician within two weeks."',
+ opts:['"patient" should be "patient\'s"','"adviced" should be "advised"','"follow up" should be "follow-up"','"within" should be "inside of"'],
+ correct:1,
+ expl:'"Adviced" is not a word. The correct past tense of "advise" is "advised."'},
+
+{id:31,sec:'s3',diff:'f',type:'mcq',
+ q:'Choose the CORRECT word: "Please _____ your insurance card to the receptionist."',
+ opts:['showed','shows','to show','show'],
+ correct:3,
+ expl:'"Show" is the imperative form used for direct instructions or requests. "Showed" is past tense; "shows" is third-person singular; "to show" is an infinitive.'},
+
+{id:32,sec:'s3',diff:'i',type:'mcq',
+ q:'Fill in the blank: "The doctor asked the patient if she _____ any allergies to penicillin."',
+ opts:['has','have','is having','had'],
+ correct:3,
+ expl:'In reported speech (indirect speech), the present tense shifts to past tense: "do you have" becomes "if she had." This is called backshift in reported speech.'},
+
+{id:33,sec:'s3',diff:'i',type:'mcq',
+ q:'Choose the INCORRECT part: "Before the procedure, the patient should not to eat or drink anything after midnight."',
+ opts:['"Before" should be "Prior of"','"should not to eat" should be "should not eat"','"or drink" should be "nor drink"','"after midnight" should be "after the midnight"'],
+ correct:1,
+ expl:'"Should not to eat" is incorrect. Modal verbs like "should" are followed by a bare infinitive (without "to"): "should not eat."'},
+
+{id:34,sec:'s3',diff:'a',type:'mcq',
+ q:'Which sentence is GRAMMATICALLY CORRECT?',
+ opts:["The chart of the patient were updated by the nurse.","By nurse, the patient chart was updating.","The patient's chart was updated by the nurse.","The patient chart have been update by nurse."],
+ correct:2,
+ expl:'"The patient\'s chart was updated by the nurse" is correct passive voice. Subject-verb agreement: "chart" (singular) → "was." Possessive: "patient\'s chart" is standard clinical English.'},
+
+{id:35,sec:'s3',diff:'i',type:'mcq',
+ q:'Fill in the blank: "The test results _____ back yet, so we need to wait before making a diagnosis."',
+ opts:["didn't come","don't come","won't come","haven't come"],
+ correct:3,
+ expl:'"Haven\'t come back yet" uses present perfect to describe a situation that is still relevant now. "Didn\'t come" would suggest it is already finished and decided.'},
+
+{id:36,sec:'s3',diff:'a',type:'mcq',
+ q:'Choose the INCORRECT word: "Although the patient had been complaining of chest pain for three days, they waited until their symptoms become severe before seeking help."',
+ opts:['"Although" should be "Despite that"','"had been complaining" should be "was complained"','"become" should be "became"','"seeking help" should be "to seek help"'],
+ correct:2,
+ expl:'"Become" should be "became" — the past tense is needed here because all actions are in the past narrative. "Become" is present or infinitive form.'},
+
+{id:37,sec:'s3',diff:'f',type:'mcq',
+ q:'Fill in the blank: "The physical therapist _____ the patient how to use the crutches correctly."',
+ opts:['teached','teach','is teaching','taught'],
+ correct:3,
+ expl:'"Taught" is the correct irregular past tense of "teach." "Teached" is a common error but is not standard English.'},
+
+{id:38,sec:'s3',diff:'i',type:'mcq',
+ q:'Fill in the blank: "The patient _____ blood pressure medication every morning without fail."',
+ opts:['take','is taken','have taken','takes'],
+ correct:3,
+ expl:'The patient (third-person singular) takes medication as a regular habit → simple present with -s ending: "takes."'},
+
+{id:39,sec:'s3',diff:'a',type:'mcq',
+ q:'Which phrasing is MOST appropriate for professional clinical documentation?',
+ opts:["Patient was kinda confused when they came in.","Person got here all confused-like and didn't make sense.","Patient seemed weird and mixed up on arrival.","The patient presented with altered mental status upon arrival."],
+ correct:3,
+ expl:'"Presented with altered mental status" is the standard clinical phrase. Clinical documentation must use professional, objective language — never colloquial or vague descriptions.'},
+
+{id:40,sec:'s3',diff:'a',type:'mcq',
+ q:'Choose the INCORRECT word: "The medical team done a thorough assessment of the patient\'s condition before making their recommendations."',
+ opts:['"done" should be "did"','"thorough" should be "thoroughly"','"making" should be "make"','"recommendations" should be "recommendation"'],
+ correct:0,
+ expl:'"Done" cannot stand alone as a past tense verb. The simple past of "do" is "did." "Done" requires a helper verb: "had done" or "has done."'},
+
+// ── WRITING PART A: Read & Write (Q40-Q44) ────────────────
+{id:41,sec:'s4',diff:'i',type:'writing',
+ passageText:"Osteoporosis is a condition that weakens bones, making them fragile and more likely to break. It develops slowly over several years and is often only diagnosed when a fall or sudden impact causes a fracture. Osteoporosis is more common in women than men, particularly after menopause, because estrogen helps protect bone density. Treatment includes medications called bisphosphonates, adequate calcium and vitamin D intake, weight-bearing exercise, and fall prevention strategies.",
+ q:"Reading Comprehension – Written Response",
+ writingPrompt:"According to the passage, what are TWO factors that increase the risk of osteoporosis? Write your answer in two to three complete sentences.",
+ keyTerms:['women','menopause','estrogen','bone density','age','fracture','female'],
+ modelAnswer:"Osteoporosis is more common in women, especially after menopause, because estrogen helps protect bone density. The condition also tends to develop slowly over many years and may not be diagnosed until a fracture occurs from a fall or sudden impact."},
+
+{id:42,sec:'s4',diff:'i',type:'writing',
+ passageText:'When documenting a patient\'s chief complaint, the healthcare worker should use the patient\'s own words whenever possible, enclosed in quotation marks. This practice preserves the accuracy of the original statement and avoids paraphrasing that might alter the clinical meaning. For example, instead of writing "the patient has abdominal pain," you would write: patient states, "I have a sharp pain in my belly that started this morning."',
+ q:"Reading Comprehension – Written Response",
+ writingPrompt:"Why is it important to use a patient's exact words when documenting their chief complaint? Write two to three sentences explaining the reason.",
+ keyTerms:["quotation marks","accuracy","paraphrasing","clinical meaning","patient's own words","alter","statement"],
+ modelAnswer:"Using the patient's exact words in quotation marks preserves the accuracy of their original statement. Paraphrasing can alter the clinical meaning of what the patient reported, which could lead to misunderstandings in care. Quoting directly makes clear that the words are the patient's own, not the healthcare worker's interpretation."},
+
+{id:43,sec:'s4',diff:'i',type:'writing',
+ passageText:"A patient's right to privacy extends to all aspects of their healthcare information. Under HIPAA (the Health Insurance Portability and Accountability Act), healthcare providers are required to protect patients' personal health information (PHI). This includes not discussing patient information in public areas, not leaving patient charts visible in high-traffic areas, and ensuring that electronic records are password-protected. Violations of HIPAA can result in significant financial penalties and legal consequences for the provider.",
+ q:"Reading Comprehension – Written Response",
+ writingPrompt:"Name THREE specific practices mentioned in the passage that healthcare workers must follow to protect patient privacy. Write in complete sentences.",
+ keyTerms:["public areas","charts visible","password-protected","PHI","personal health information","HIPAA","electronic records"],
+ modelAnswer:"Healthcare workers must not discuss patient information in public areas, as this can be overheard by others. They should not leave patient charts visible in high-traffic areas where unauthorized people could read them. Additionally, electronic health records must be kept password-protected to safeguard patients' personal health information under HIPAA."},
+
+{id:44,sec:'s4',diff:'a',type:'writing',
+ passageText:"Motivational interviewing (MI) is a patient-centered counseling approach used to help people change unhealthy behaviors. Rather than telling patients what to do, the healthcare provider uses open-ended questions, reflective listening, and affirmations to help patients explore their own motivations for change. The approach is based on the belief that patients are more likely to change behavior when they feel their autonomy is respected and when they identify their own reasons for making the change.",
+ q:"Reading Comprehension – Written Response",
+ writingPrompt:"Describe motivational interviewing in your own words and explain one reason why it might be effective. Write three to four sentences.",
+ keyTerms:["patient-centered","open-ended","reflective listening","autonomy","motivation","behavior","change","explore"],
+ modelAnswer:"Motivational interviewing is a counseling approach where the healthcare provider helps patients find their own reasons to change unhealthy behaviors, rather than simply telling them what to do. The provider uses open-ended questions, reflective listening, and affirmations during the conversation. This approach may be effective because patients are more likely to change when they feel their autonomy is respected and when they personally identify reasons for making a change."},
+
+{id:45,sec:'s4',diff:'a',type:'writing',
+ passageText:"Informed consent is a legal and ethical requirement before performing any medical procedure or treatment. The healthcare provider must explain the procedure in terms the patient can understand, including the purpose, the expected benefits, the potential risks and side effects, and any alternative options. The patient must be given the opportunity to ask questions and must consent voluntarily — meaning they have not been pressured or coerced. A signature on a consent form is documentation of this process, not a substitute for the conversation itself.",
+ q:"Reading Comprehension – Written Response",
+ writingPrompt:"According to the passage, what FOUR things must a healthcare provider explain when obtaining informed consent? Write in complete sentences.",
+ keyTerms:["purpose","benefits","risks","side effects","alternatives","options","questions","voluntary","coerced","pressured"],
+ modelAnswer:"When obtaining informed consent, the provider must explain the purpose of the procedure and the expected benefits. The provider must also describe the potential risks and side effects, and present any alternative treatment options. The patient must be given time to ask questions and must agree voluntarily, without any pressure or coercion."},
+
+// ── WRITING PART B: Listen & Write (Q45-Q49) ─────────────
+{id:46,sec:'s5',diff:'i',type:'writing',
+ audioText:"When a patient appears confused or disoriented, it may indicate a medical emergency such as a stroke, low blood sugar, or a severe infection. Healthcare workers should never dismiss sudden confusion as anxiety or stress. Immediate assessment is required, including checking vital signs and blood glucose levels, and calling for physician evaluation.",
+ audioRate:0.86,
+ q:"Listening Response – Written Answer",
+ writingPrompt:"What THREE possible medical causes of sudden patient confusion are mentioned in the audio? List them and write one or two complete sentences.",
+ keyTerms:["stroke","low blood sugar","hypoglycemia","severe infection","confusion","disoriented","emergency"],
+ modelAnswer:"According to the audio, sudden confusion or disorientation in a patient may indicate a stroke, low blood sugar (hypoglycemia), or a severe infection. These are considered medical emergencies and require immediate assessment rather than being dismissed as anxiety or stress."},
+
+{id:47,sec:'s5',diff:'f',type:'writing',
+ audioText:"Before administering any medication, you must verify five rights: the right patient, the right drug, the right dose, the right route, and the right time. Always check the patient's armband and ask them to state their full name and date of birth. Never assume. These verification steps prevent medication errors.",
+ audioRate:0.86,
+ q:"Listening Response – Written Answer",
+ writingPrompt:"List all FIVE of the 'rights' of medication administration that were mentioned in the audio. Write in complete sentences.",
+ keyTerms:["right patient","right drug","right dose","right route","right time","five rights","medication"],
+ modelAnswer:"The five rights of medication administration are: the right patient, the right drug, the right dose, the right route, and the right time. Always verifying these five rights before giving any medication helps prevent dangerous medication errors."},
+
+{id:48,sec:'s5',diff:'a',type:'writing',
+ audioText:"Cultural humility means approaching each patient interaction with openness and a willingness to learn from them about their background, beliefs, and preferences. Unlike cultural competence, which implies mastering knowledge about specific cultures, cultural humility acknowledges that we can never fully know another person's experience. It involves self-reflection, recognizing your own biases, and adapting your communication style to meet the patient's needs.",
+ audioRate:0.86,
+ q:"Listening Response – Written Answer",
+ writingPrompt:"Explain the difference between cultural humility and cultural competence as described in the audio. Write two to three complete sentences.",
+ keyTerms:["cultural humility","cultural competence","openness","biases","self-reflection","adapt","mastering","experience"],
+ modelAnswer:"Cultural humility means approaching patients with openness and a willingness to learn about their unique backgrounds and beliefs. Cultural competence, on the other hand, implies gaining mastery of knowledge about specific cultures, which cultural humility recognizes as insufficient. Cultural humility goes further by requiring self-reflection, awareness of one's own biases, and adapting communication to each individual patient's needs."},
+
+{id:49,sec:'s5',diff:'a',type:'writing',
+ audioText:"A language access plan ensures that all patients, regardless of their language, receive equal access to healthcare services. Under Title VI of the Civil Rights Act, healthcare organizations that receive federal funding are required to provide meaningful access to Limited English Proficient patients. This includes providing trained interpreters — in person, by phone, or by video — at no cost to the patient. Using untrained bilingual staff for medical interpretation is discouraged because it increases the risk of medical errors.",
+ audioRate:0.86,
+ q:"Listening Response – Written Answer",
+ writingPrompt:"What does Title VI of the Civil Rights Act require regarding language access in healthcare? Write two to three complete sentences.",
+ keyTerms:["Title VI","Civil Rights Act","federal funding","Limited English Proficient","LEP","trained interpreters","no cost","medical errors","language access"],
+ modelAnswer:"Under Title VI of the Civil Rights Act, healthcare organizations that receive federal funding must provide meaningful language access to Limited English Proficient patients. This means providing trained interpreters — in person, by phone, or by video — at no cost to the patient. Using untrained bilingual staff for medical interpretation is discouraged because it increases the risk of medical errors."},
+
+{id:50,sec:'s5',diff:'i',type:'writing',
+ audioText:"When documenting a medication refusal, you must clearly state that the patient was informed of the risks of refusing treatment and that they understood the information provided. Document the patient's exact words if possible. Note the date, time, and who was present. This protects both the patient and the healthcare team legally and ensures continuity of care.",
+ audioRate:0.86,
+ q:"Listening Response – Written Answer",
+ writingPrompt:"What are THREE important elements to include when documenting a medication refusal? Write in complete sentences.",
+ keyTerms:["risks of refusing","patient understood","exact words","date","time","who was present","legal","continuity of care","informed"],
+ modelAnswer:"When documenting a medication refusal, you should first state that the patient was informed of the risks of refusing and that they understood. Second, you should document the patient's exact words if possible. Third, record the date, time, and names of everyone present — this protects both the patient and the healthcare team legally and ensures continuity of care."}
+];
+
+// ================================================================
+//  PROFICIENCY LEVELS
+// ================================================================
+const LEVELS = [
+  {l:1,name:'Not Qualified',actfl:'Intermediate Low–Novice',cefr:'A1–A2',ilr:'0+',min:0,max:49.9,
+   roles:'No bilingual patient-facing duties at this time.',
+   interp:'Professional interpreter required for ALL patient interactions.'},
+  {l:2,name:'Basic Customer Service Only',actfl:'Intermediate Mid',cefr:'A2',ilr:'1',min:50,max:59.9,
+   roles:'Non-clinical administrative tasks; bilingual backup required.',
+   interp:'Professional interpreter required for all clinical interactions. May handle simple non-clinical exchanges independently.'},
+  {l:3,name:'Limited Community Outreach',actfl:'Intermediate High',cefr:'B1',ilr:'1+',min:60,max:69.9,
+   roles:'Outreach and enrollment assistance (supervised). Patient registration support.',
+   interp:'Professional interpreter required for clinical care. May handle routine outreach and scheduling independently.'},
+  {l:4,name:'Routine Healthcare Interactions',actfl:'Advanced Low',cefr:'B2',ilr:'2',min:70,max:74.9,
+   roles:'Community Health Worker, Patient Navigator, Registration Staff, Medical Assistant (routine tasks).',
+   interp:'Professional interpreter recommended for complex clinical, informed consent, and mental health discussions.'},
+  {l:5,name:'Complex Healthcare Communication',actfl:'Advanced Mid',cefr:'B2',ilr:'2+',min:75,max:79.9,
+   roles:'Care Coordinator, Case Manager, Health Educator, all Level 4 roles.',
+   interp:'Professional interpreter recommended for highly technical medical discussions and formal legal/consent processes.'},
+  {l:6,name:'Professional Working Bilingual',actfl:'Advanced High',cefr:'C1',ilr:'3',min:80,max:89.9,
+   roles:'All Level 4–5 roles; eligible for interpreter trainee programs.',
+   interp:'Professional interpreter recommended for specialized legal and complex psychiatric or surgical consent.'},
+  {l:7,name:'Near-Native Professional',actfl:'Superior',cefr:'C2',ilr:'4',min:90,max:100,
+   roles:'All roles; independent complex bilingual communication.',
+   interp:'Professional interpreter at candidate discretion for highly specialized or sensitive communications.'}
+];
+
+const SECTION_META = {
+  s1:{label:'Listening – Part 1',icon:'🎧',cls:'s1',
+    desc:'You will hear 10 short healthcare phrases. Listen carefully and answer the multiple-choice questions. You may play each audio up to 3 times.',
+    pills:['10 questions','Short phrases','Up to 3 plays each','Healthcare settings']},
+  s2:{label:'Listening – Part 2',icon:'🎙️',cls:'s2',
+    desc:'You will hear 10 clinical dialogues between healthcare providers and patients. Listen and answer questions about each conversation.',
+    pills:['10 questions','Clinical dialogs','Prescriptions & procedures','Up to 3 plays each']},
+  s3:{label:'Grammar & Language',icon:'📝',cls:'s3',
+    desc:'20 grammar questions testing fill-in-the-blank, error identification, and correct sentence selection. No audio required.',
+    pills:['20 questions','Fill in the blank','Identify errors','Clinical English']},
+  s4:{label:'Writing – Part A',icon:'📖',cls:'s4',
+    desc:'Read a healthcare passage and write a response in complete sentences. After the exam you will self-assess your answers against a model response.',
+    pills:['5 questions','Read & respond','Written sentences','Self-assessed']},
+  s5:{label:'Writing – Part B',icon:'✍️',cls:'s5',
+    desc:'Listen to a short healthcare audio clip and write your response in complete sentences. You may play each audio up to 3 times.',
+    pills:['5 questions','Listen & write','Complete sentences','Self-assessed']}
+};
+
+// ================================================================
+//  STATE
+// ================================================================
+let S = {
+  candidate:null,
+  qi:0,           // current question index (0-49)
+  answers:[],     // MCQ answers (index)
+  writingTexts:{},// writing answers by qi
+  selfScores:{},  // writing self-scores by qi
+  diff:'i',       // current difficulty: f/i/a
+  consec_c:0, consec_w:0,
+  mcq_wrong:0, mcq_total:0,
+  earlyEnd:false,
+  secs:5400,
+  timerInterval:null,
+  audioPlays:{},
+  wrReviewIdx:0,  // writing review index
+  wrList:[],      // list of writing question indices
+  pendingAnswer:null, // selected but not confirmed MCQ answer
+  confirmed:false,    // answer confirmed?
+  seenSections:new Set(),
+  speech:null
+};
+
+// ================================================================
+//  REGISTRATION
+// ================================================================
+function startExam() {
+  const first = document.getElementById('reg-first').value.trim();
+  const last  = document.getElementById('reg-last').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const role  = document.getElementById('reg-role').value;
+  const consent = document.getElementById('reg-consent').checked;
+  const errEl = document.getElementById('reg-error');
+
+  if(!first||!last){return showRegErr('Please enter your first and last name.');}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return showRegErr('Please enter a valid email address.');}
+  if(!role){return showRegErr('Please select your job role.');}
+  if(!consent){return showRegErr('Please read and accept the assessment terms to continue.');}
+
+  S.candidate = {
+    name: first+' '+last,
+    email, role,
+    org: document.getElementById('reg-org').value.trim(),
+    lang: document.getElementById('reg-lang').value,
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+  };
+
+  S.answers = new Array(QUESTIONS.length).fill(null);
+  S.qi = 0;
+  S.diff = 'i';
+  S.consec_c = 0; S.consec_w = 0;
+  S.mcq_wrong = 0; S.mcq_total = 0;
+  S.earlyEnd = false;
+  S.secs = 5400;
+  S.audioPlays = {};
+  S.wrReviewIdx = 0;
+  S.wrList = QUESTIONS.map((q,i)=>q.type==='writing'?i:null).filter(i=>i!==null);
+  S.selfScores = {};
+  S.writingTexts = {};
+  S.seenSections = new Set();
+  S.pendingAnswer = null;
+  S.confirmed = false;
+
+  document.getElementById('hdr-name').textContent = S.candidate.name;
+
+  showScreen('exam');
+  startTimer();
+  renderQuestion();
+}
+function showRegErr(msg){
+  const e=document.getElementById('reg-error');
+  e.textContent=msg;e.classList.remove('hidden');
+}
+
+// ================================================================
+//  SCREEN MANAGEMENT
+// ================================================================
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-'+name).classList.add('active');
+}
+
+// ================================================================
+//  TIMER
+// ================================================================
+function startTimer(){
+  S.timerInterval = setInterval(()=>{
+    S.secs--;
+    updateTimerDisplay();
+    if(S.secs<=0){clearInterval(S.timerInterval);handleTimeUp();}
+  },1000);
+}
+function updateTimerDisplay(){
+  const m=Math.floor(S.secs/60), s=S.secs%60;
+  const txt=`${m}:${String(s).padStart(2,'0')}`;
+  ['timer-display','wr-timer-display'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=txt;
+  });
+  const tw=document.getElementById('timer-wrap');
+  if(!tw)return;
+  tw.classList.remove('warn','danger');
+  if(S.secs<300) tw.classList.add('danger');
+  else if(S.secs<600) tw.classList.add('warn');
+  // sync writing review timer
+  const wrtw=document.getElementById('wr-timer-wrap');
+  if(wrtw){
+    wrtw.classList.remove('warn','danger');
+    if(S.secs<300) wrtw.classList.add('danger');
+    else if(S.secs<600) wrtw.classList.add('warn');
+  }
+}
+function handleTimeUp(){
+  if(S.qi < QUESTIONS.length){
+    // force to results
+    goToWritingReviewOrResults();
+  }
+}
+
+// ================================================================
+//  QUESTION RENDERING
+// ================================================================
+function renderQuestion(){
+  if(S.earlyEnd){
+    goToWritingReviewOrResults();
+    return;
+  }
+
+  const q = QUESTIONS[S.qi];
+  if(!q){
+    goToWritingReviewOrResults();
+    return;
+  }
+
+  // Check if we need a section intro
+  const sec = q.sec;
+  if(!S.seenSections.has(sec)){
+    S.seenSections.add(sec);
+    showSectionIntro(sec);
+    return;
+  }
+
+  document.getElementById('sec-intro-wrap').style.display='none';
+  document.getElementById('q-wrap').style.display='block';
+
+  // Header section label
+  document.getElementById('hdr-section').textContent = SECTION_META[sec].label;
+
+  // Progress
+  const pct = Math.round((S.qi/QUESTIONS.length)*100);
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('q-progress-text').textContent = `Question ${S.qi+1} of ${QUESTIONS.length}`;
+
+  // Section badge
+  const sb = document.getElementById('q-sec-badge');
+  sb.className = 'sec-badge '+SECTION_META[sec].cls;
+  sb.textContent = SECTION_META[sec].icon+' '+SECTION_META[sec].label;
+
+  // Difficulty badge
+  const db = document.getElementById('q-diff-badge');
+  const diffMap = {f:'Foundational',i:'Intermediate',a:'Advanced'};
+  db.className = 'diff-badge '+q.diff;
+  db.textContent = diffMap[q.diff]||'';
+
+  document.getElementById('q-num').textContent = `Question ${S.qi+1}`;
+  document.getElementById('q-text').textContent = q.q;
+
+  // Hide all content areas first
+  document.getElementById('audio-player').classList.add('hidden');
+  document.getElementById('passage-player').classList.add('hidden');
+  document.getElementById('mcq-options').classList.add('hidden');
+  document.getElementById('writing-area-wrap').classList.add('hidden');
+  document.getElementById('feedback-box').classList.add('hidden');
+  document.getElementById('confirm-btn').classList.add('hidden');
+  document.getElementById('next-btn').classList.add('hidden');
+  document.getElementById('writing-next-btn').classList.add('hidden');
+  document.getElementById('early-term-notice').classList.add('hidden');
+
+  S.pendingAnswer = null;
+  S.confirmed = false;
+
+  if(q.type === 'mcq'){
+    // Show audio if listening
+    if(q.audioText){
+      renderAudioPlayer(q, false);
+    }
+    // Render options
+    renderMCQOptions(q);
+  } else {
+    // Writing question
+    if(q.audioText){
+      renderAudioPlayer(q, false);
+    }
+    if(q.passageText){
+      document.getElementById('passage-player').classList.remove('hidden');
+      document.getElementById('passage-text').textContent = q.passageText;
+    }
+    renderWritingArea(q);
+  }
+}
+
+function renderAudioPlayer(q, isReview){
+  const prefix = isReview ? 'wr-' : '';
+  const playerEl = document.getElementById(prefix+'audio-player');
+  playerEl.classList.remove('hidden');
+  const plays = S.audioPlays[S.qi] || 0;
+  const maxPlays = 3;
+  const btn = document.getElementById(prefix+'play-btn');
+  btn.className = 'play-btn' + (plays>=maxPlays?' done':'');
+  btn.disabled = plays>=maxPlays;
+  btn.textContent = '▶';
+
+  const titleEl = document.getElementById(prefix+'audio-title');
+  if(titleEl) titleEl.textContent = q.sec==='s1'?'Healthcare Phrase':'Healthcare Dialog';
+
+  const metaEl = document.getElementById(prefix+'audio-meta');
+  if(metaEl) metaEl.textContent = `Plays: ${plays}/${maxPlays}`;
+
+  const trEl = document.getElementById(prefix+'transcript-box');
+  if(trEl){ trEl.textContent = q.audioText; trEl.classList.remove('open'); }
+}
+
+function renderMCQOptions(q){
+  const wrap = document.getElementById('mcq-options');
+  wrap.classList.remove('hidden');
+  wrap.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = ()=> selectMCQAnswer(i);
+    wrap.appendChild(btn);
+  });
+  document.getElementById('confirm-btn').classList.remove('hidden');
+}
+
+function renderWritingArea(q){
+  const wrap = document.getElementById('writing-area-wrap');
+  wrap.classList.remove('hidden');
+  document.getElementById('writing-prompt').textContent = q.writingPrompt;
+  const ta = document.getElementById('writing-input');
+  ta.value = S.writingTexts[S.qi] || '';
+  updateCharCount();
+  document.getElementById('writing-next-btn').classList.remove('hidden');
+}
+
+function updateCharCount(){
+  const val = document.getElementById('writing-input').value;
+  document.getElementById('char-count').textContent = val.length+' character'+(val.length===1?'':'s');
+}
+
+// ================================================================
+//  SECTION INTRO
+// ================================================================
+function showSectionIntro(sec){
+  document.getElementById('q-wrap').style.display='none';
+  const iw = document.getElementById('sec-intro-wrap');
+  iw.style.display='block';
+
+  const m = SECTION_META[sec];
+  document.getElementById('si-icon').textContent = m.icon;
+  document.getElementById('si-title').textContent = m.label;
+  document.getElementById('si-desc').textContent = m.desc;
+
+  const pills = document.getElementById('si-pills');
+  pills.innerHTML = m.pills.map(p=>`<span class="pill">${p}</span>`).join('');
+
+  document.getElementById('hdr-section').textContent = m.label;
+}
+function dismissSectionIntro(){
+  document.getElementById('sec-intro-wrap').style.display='none';
+  document.getElementById('q-wrap').style.display='block';
+  renderQuestion();
+}
+
+// ================================================================
+//  AUDIO (TTS)
+// ================================================================
+function toggleAudio(){
+  const q = QUESTIONS[S.qi];
+  if(!q||!q.audioText) return;
+  const plays = S.audioPlays[S.qi]||0;
+  if(plays>=3) return;
+
+  if(window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+    document.getElementById('play-btn').textContent='▶';
+    document.getElementById('play-btn').classList.remove('playing');
+    return;
+  }
+
+  const utt = new SpeechSynthesisUtterance(q.audioText);
+  utt.rate = q.audioRate||0.88;
+  utt.pitch = 1;
+  utt.lang = 'en-US';
+
+  S.audioPlays[S.qi] = plays+1;
+  const btn = document.getElementById('play-btn');
+  btn.textContent='⏹';
+  btn.classList.add('playing');
+  const meta = document.getElementById('audio-meta');
+  if(meta) meta.textContent=`Plays: ${S.audioPlays[S.qi]}/3`;
+  if(S.audioPlays[S.qi]>=3){
+    btn.className='play-btn done';
+    btn.disabled=true;
+  }
+
+  utt.onend = ()=>{
+    if(btn.classList.contains('playing')){
+      btn.textContent='▶';
+      btn.classList.remove('playing');
+    }
+  };
+  window.speechSynthesis.speak(utt);
+}
+
+function toggleTranscript(){
+  const tb = document.getElementById('transcript-box');
+  tb.classList.toggle('open');
+}
+
+function toggleReviewAudio(){
+  const wrList = getWritingQsBySection();
+  const q = QUESTIONS[wrList[S.wrReviewIdx]];
+  if(!q||!q.audioText) return;
+  const plays = S.audioPlays['wr_'+S.wrReviewIdx]||0;
+  if(plays>=3) return;
+
+  if(window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+    document.getElementById('wr-play-btn').textContent='▶';
+    document.getElementById('wr-play-btn').classList.remove('playing');
+    return;
+  }
+
+  const utt = new SpeechSynthesisUtterance(q.audioText);
+  utt.rate = q.audioRate||0.88;
+  utt.lang = 'en-US';
+  S.audioPlays['wr_'+S.wrReviewIdx] = plays+1;
+  const btn = document.getElementById('wr-play-btn');
+  btn.textContent='⏹';
+  btn.classList.add('playing');
+  const meta = document.getElementById('wr-audio-meta');
+  if(meta) meta.textContent = `Plays: ${S.audioPlays['wr_'+S.wrReviewIdx]}/3`;
+  if(S.audioPlays['wr_'+S.wrReviewIdx]>=3){
+    btn.className='play-btn done';
+    btn.disabled=true;
+  }
+  utt.onend = ()=>{ btn.textContent='▶'; btn.classList.remove('playing'); };
+  window.speechSynthesis.speak(utt);
+}
+
+function toggleReviewTranscript(){
+  const tb = document.getElementById('wr-transcript-box');
+  tb.classList.toggle('open');
+}
+
+// ================================================================
+//  MCQ ANSWER HANDLING
+// ================================================================
+function selectMCQAnswer(idx){
+  if(S.confirmed) return;
+  S.pendingAnswer = idx;
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{
+    b.classList.toggle('sel', i===idx);
+  });
+  document.getElementById('confirm-btn').disabled = false;
+}
+
+function confirmAnswer(){
+  if(S.pendingAnswer===null) return;
+  S.confirmed = true;
+  const q = QUESTIONS[S.qi];
+  const idx = S.pendingAnswer;
+  S.answers[S.qi] = idx;
+
+  const isCorrect = idx === q.correct;
+
+  // Adaptive
+  if(q.sec!=='s4'&&q.sec!=='s5'){
+    adaptDifficulty(isCorrect);
+    if(!isCorrect){
+      S.mcq_wrong++;
+    }
+    S.mcq_total++;
+    if(S.mcq_total>=10 && S.mcq_wrong/S.mcq_total > 0.35){
+      S.earlyEnd = true;
+      document.getElementById('early-term-notice').classList.remove('hidden');
+    }
+  }
+
+  // Style options
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.correct) b.classList.add('correct');
+    else if(i===idx&&!isCorrect) b.classList.add('wrong');
+    b.classList.remove('sel');
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedback-box');
+  fb.classList.remove('hidden');
+  fb.className = 'feedback '+(isCorrect?'ok':'bad');
+  fb.innerHTML = `<strong>${isCorrect?'✓ Correct!':'✗ Incorrect'}</strong><div class="expl">${q.expl||''}</div>`;
+
+  document.getElementById('confirm-btn').classList.add('hidden');
+  document.getElementById('next-btn').classList.remove('hidden');
+}
+
+function adaptDifficulty(isCorrect){
+  if(isCorrect){
+    S.consec_c++; S.consec_w=0;
+    if(S.consec_c>=2){ S.diff=S.diff==='f'?'i':S.diff==='i'?'a':'a'; S.consec_c=0; }
+  } else {
+    S.consec_w++; S.consec_c=0;
+    if(S.consec_w>=2){ S.diff=S.diff==='a'?'i':S.diff==='i'?'f':'f'; S.consec_w=0; }
+  }
+}
+
+// ================================================================
+//  WRITING ANSWER HANDLING
+// ================================================================
+function saveWritingAndNext(){
+  const ta = document.getElementById('writing-input');
+  S.writingTexts[S.qi] = ta.value.trim();
+  nextQuestion();
+}
+
+// ================================================================
+//  NAVIGATION
+// ================================================================
+function nextQuestion(){
+  if(window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+  S.qi++;
+  if(S.qi >= QUESTIONS.length || S.earlyEnd){
+    goToWritingReviewOrResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function goToWritingReviewOrResults(){
+  if(window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+  // Check if any writing questions answered (we always review writing)
+  S.wrReviewIdx = 0;
+  renderWritingReview();
+}
+
+// ================================================================
+//  WRITING REVIEW
+// ================================================================
+function getWritingQsBySection(){
+  return QUESTIONS.map((q,i)=>q.type==='writing'?i:null).filter(i=>i!==null);
+}
+
+function renderWritingReview(){
+  const list = getWritingQsBySection();
+  if(S.wrReviewIdx >= list.length){
+    showResults();
+    return;
+  }
+
+  showScreen('writing-review');
+
+  const qi = list[S.wrReviewIdx];
+  const q = QUESTIONS[qi];
+
+  // Progress
+  const pct = Math.round((S.wrReviewIdx/list.length)*100);
+  document.getElementById('wr-progress-fill').style.width = pct+'%';
+  document.getElementById('wr-progress-text').textContent =
+    `Writing question ${S.wrReviewIdx+1} of ${list.length}`;
+
+  // Section badge
+  const sb = document.getElementById('wr-sec-badge');
+  sb.className = 'sec-badge '+SECTION_META[q.sec].cls;
+  sb.textContent = SECTION_META[q.sec].icon+' '+SECTION_META[q.sec].label;
+
+  document.getElementById('wr-section-label').textContent = SECTION_META[q.sec].label;
+
+  // Audio for s5
+  const waPlayer = document.getElementById('wr-audio-player');
+  waPlayer.classList.add('hidden');
+  if(q.audioText){
+    waPlayer.classList.remove('hidden');
+    const plays = S.audioPlays['wr_'+S.wrReviewIdx]||0;
+    const btn = document.getElementById('wr-play-btn');
+    btn.className='play-btn'+(plays>=3?' done':'');
+    btn.disabled=plays>=3;
+    btn.textContent='▶';
+    const meta = document.getElementById('wr-audio-meta');
+    if(meta) meta.textContent=`Plays: ${plays}/3`;
+    const tr=document.getElementById('wr-transcript-box');
+    if(tr){tr.textContent=q.audioText;tr.classList.remove('open');}
+  }
+
+  // Passage for s4
+  const wpPlayer = document.getElementById('wr-passage-player');
+  wpPlayer.classList.add('hidden');
+  if(q.passageText){
+    wpPlayer.classList.remove('hidden');
+    document.getElementById('wr-passage-text').textContent = q.passageText;
+  }
+
+  document.getElementById('wr-q-text').textContent = q.writingPrompt;
+
+  document.getElementById('wr-your-answer').textContent =
+    S.writingTexts[qi]||'(No answer provided)';
+  document.getElementById('wr-model-answer').textContent = q.modelAnswer;
+
+  // Reset rubric
+  document.querySelectorAll('.rubric-btn').forEach(b=>b.classList.remove('sel'));
+  if(S.selfScores[qi] !== undefined){
+    const score = S.selfScores[qi];
+    document.querySelectorAll('.rubric-btn').forEach(b=>{
+      const s = parseInt(b.querySelector('.rb-score').textContent);
+      if(s===score) b.classList.add('sel');
+    });
+  }
+  document.getElementById('wr-next-btn').disabled = S.selfScores[qi]===undefined;
+}
+
+function selectSelfScore(score){
+  const qi = getWritingQsBySection()[S.wrReviewIdx];
+  S.selfScores[qi] = score;
+  document.querySelectorAll('.rubric-btn').forEach(b=>{
+    const s=parseInt(b.querySelector('.rb-score').textContent);
+    b.classList.toggle('sel', s===score);
+  });
+  document.getElementById('wr-next-btn').disabled = false;
+}
+
+function nextWritingReview(){
+  S.wrReviewIdx++;
+  renderWritingReview();
+}
+
+// ================================================================
+//  RESULTS
+// ================================================================
+function showResults(){
+  if(window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+  clearInterval(S.timerInterval);
+
+  const c = S.candidate;
+  showScreen('results');
+
+  // MCQ scoring
+  const mcqQs = QUESTIONS.filter((q,i)=>q.type==='mcq' && S.answers[i]!==null);
+  const mcqRight = mcqQs.filter((q,i)=>{
+    const qi = QUESTIONS.indexOf(q);
+    return S.answers[qi]===q.correct;
+  }).length;
+  const mcqTotal = mcqQs.length;
+
+  // Writing scoring (self-assessed)
+  const wList = getWritingQsBySection();
+  let wScore=0, wTotal=0;
+  wList.forEach(qi=>{
+    const sc = S.selfScores[qi];
+    if(sc!==undefined){
+      wScore += sc/4; // normalize to 0-1
+      wTotal++;
+    }
+  });
+
+  // Combined score
+  const mcqWeight = 0.7, wWeight = 0.3;
+  const mcqPct = mcqTotal>0 ? mcqRight/mcqTotal : 0;
+  const wPct = wTotal>0 ? wScore/wTotal : 0;
+  const combined = (mcqPct*mcqWeight + wPct*wWeight);
+  const overallPct = Math.round(combined*100);
+  const passed = overallPct >= 60;
+
+  // ACTFL level
+  const level = LEVELS.find(l=>overallPct>=l.min && overallPct<=l.max) || LEVELS[0];
+
+  // Section scores
+  const secs = ['s1','s2','s3','s4','s5'];
+  const secScores = {};
+  secs.forEach(sec=>{
+    const qs = QUESTIONS.filter((q,i)=>{
+      if(q.sec!==sec) return false;
+      if(q.type==='mcq') return S.answers[i]!==null;
+      return true;
+    });
+    if(qs.length===0){secScores[sec]={pct:0,n:0};return;}
+    let right=0;
+    qs.forEach(q=>{
+      const qi=QUESTIONS.indexOf(q);
+      if(q.type==='mcq'){
+        if(S.answers[qi]===q.correct) right++;
+      } else {
+        const sc=S.selfScores[qi]||0;
+        right += sc/4;
+      }
+    });
+    secScores[sec]={pct:Math.round(right/qs.length*100),n:qs.length};
+  });
+
+  // UI updates
+  document.getElementById('res-name').textContent = c.name + ' · ' + c.role;
+  document.getElementById('res-score-num').textContent = overallPct+'%';
+
+  const lc = document.getElementById('level-card');
+  lc.className = 'level-card '+(passed?'passed':'failed');
+  document.getElementById('res-level-name').textContent = 'Level '+level.l+': '+level.name;
+  document.getElementById('pass-chip').textContent = passed?'✓ PASS':'✗ DOES NOT MEET THRESHOLD';
+  document.getElementById('pass-chip').className = 'pass-chip '+(passed?'pass':'fail');
+  document.getElementById('res-level-sub').textContent = level.roles;
+  document.getElementById('fw-tags').innerHTML =
+    `<span class="fw-tag">ACTFL <strong>${level.actfl}</strong></span>
+     <span class="fw-tag">CEFR <strong>${level.cefr}</strong></span>
+     <span class="fw-tag">ILR <strong>${level.ilr}</strong></span>`;
+
+  // Section scores grid
+  const sg = document.getElementById('scores-grid');
+  sg.innerHTML = '';
+  secs.forEach(sec=>{
+    const pct=secScores[sec].pct;
+    const cls=pct>=75?'good':pct>=60?'ok':'poor';
+    const card=document.createElement('div');
+    card.className='sec-card';
+    card.innerHTML=`<div class="sc-lbl">${SECTION_META[sec].icon} ${SECTION_META[sec].label}</div>
+      <div class="sc-bar"><div class="sc-fill ${cls}" style="width:${pct}%"></div></div>
+      <div class="sc-pct">${pct}%</div>`;
+    sg.appendChild(card);
+  });
+
+  // Strengths / improvements
+  const strengths = secs.filter(s=>secScores[s].pct>=75).map(s=>SECTION_META[s].label);
+  const improve  = secs.filter(s=>secScores[s].pct<65 && secScores[s].n>0).map(s=>SECTION_META[s].label);
+
+  // Report table
+  const rt=document.getElementById('report-tbl');
+  const rows=[
+    ['Candidate',c.name],
+    ['Assessment Date',c.date],
+    ['Job Role',c.role],
+    ['Overall Score',overallPct+'%'],
+    ['MCQ Score (70% weight)',Math.round(mcqPct*100)+'%  ('+mcqRight+'/'+mcqTotal+')'],
+    ['Writing Score (30% weight)',wTotal>0?Math.round(wPct*100)+'%':'N/A'],
+    ['Pass/Fail Threshold','60%'],
+    ['Result',passed?'PASS':'DOES NOT MEET THRESHOLD'],
+    ['ACTFL Level','Level '+level.l+': '+level.name],
+    ['ACTFL Equivalent',level.actfl],
+    ['CEFR Equivalent',level.cefr],
+    ['ILR Equivalent',level.ilr],
+    ['Strengths (≥75%)',strengths.length?strengths.join(', '):'None at this time'],
+    ['Areas for Improvement (<65%)',improve.length?improve.join(', '):'None identified']
+  ];
+  rt.innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+
+  document.getElementById('res-roles').textContent = level.roles;
+  document.getElementById('res-interp').textContent = level.interp;
+
+  if(S.earlyEnd) document.getElementById('early-term-alert').classList.remove('hidden');
+
+  // Certificate button for passing
+  if(passed){
+    document.getElementById('cert-actions').classList.remove('hidden');
+  }
+
+  // Store for certificate
+  S.results={overallPct,level,passed,c};
+}
+
+// ================================================================
+//  CERTIFICATE
+// ================================================================
+function openCertificate(){
+  const {overallPct,level,c} = S.results;
+  document.getElementById('cert-name').textContent = c.name;
+  document.getElementById('cert-desc').textContent =
+    `has successfully completed the Bilingual Healthcare ESL Proficiency Assessment `+
+    `and demonstrated English language proficiency for healthcare communication roles, `+
+    `achieving an overall score of ${overallPct}%.`;
+  document.getElementById('cert-level-num').textContent = 'Level '+level.l;
+  document.getElementById('cert-level-name').textContent = level.name;
+  document.getElementById('cert-level-equiv').textContent =
+    `ACTFL: ${level.actfl}  ·  CEFR: ${level.cefr}  ·  ILR: ${level.ilr}`;
+  document.getElementById('cert-date').textContent = 'Date: '+c.date;
+  const certId='BHESA-'+new Date().getFullYear()+'-'+Math.floor(Math.random()*90000+10000);
+  document.getElementById('cert-id').textContent = 'Certificate #: '+certId;
+  document.getElementById('cert-role').textContent = 'Role: '+c.role;
+  document.getElementById('cert-overlay').classList.add('open');
+}
+function closeCertificate(){
+  document.getElementById('cert-overlay').classList.remove('open');
+}
+
+// ================================================================
+//  RESTART
+// ================================================================
+function restartExam(){
+  if(window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+  clearInterval(S.timerInterval);
+  showScreen('landing');
+  document.getElementById('reg-error').classList.add('hidden');
+}
+</script>
+</body>
+</html>
